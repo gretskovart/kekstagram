@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Артём Грецков](https://up.htmlacademy.ru/javascript/16/user/103788).
-* Наставник: `Неизвестно`.
+* Наставник: `Без наставника`.
 
 ---
 
