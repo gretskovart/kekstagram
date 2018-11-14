@@ -28,7 +28,8 @@
   var onLoad = function (objects) {
     if (Array.isArray(objects)) {
       window.data.imgArray = objects;
-      window.renderImages(window.data.imgArray);    
+      window.renderImages(window.data.imgArray);
+      window.showFullsizeImg(window.data.imgArray[0]);
     }
   };
 
