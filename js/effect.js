@@ -1,16 +1,126 @@
 'use strict';
 
 (function () {
+  var DEFAULT_FILTER_NAME = 'none';
+
   var rangeFilter = document.querySelector('.img-upload__effect-level');
   var line = rangeFilter.querySelector('.effect-level__line');
   var sliderPin = line.querySelector('.effect-level__pin');
   var sliderValue = rangeFilter.querySelector('.effect-level__value');
   var sliderFill = rangeFilter.querySelector('.effect-level__depth');
 
-  var PinValue = {
+  var effectsListElement = window.pictures.picturesContent.querySelector('.effects__list');
+  var currentEffect = effectsListElement.querySelector('.effects__radio:checked');
+  var currentEffectName = currentEffect.value;
+  var prewiewImg = window.pictures.picturesContent.querySelector('.img-upload__preview img');
+
+  var photoEffects = {
+    chrome: {
+      CLASS: 'effects__preview--chrome',
+      PROPERTY: 'grayscale',
+      MIN_VALUE: 0,
+      MAX_VALUE: 1,
+      UNIT: ''
+    },
+    sepia: {
+      CLASS: 'effects__preview--sepia',
+      PROPERTY: 'sepia',
+      MIN_VALUE: 0,
+      MAX_VALUE: 1,
+      UNIT: ''
+    },
+    marvin: {
+      CLASS: 'effects__preview--marvin',
+      PROPERTY: 'invert',
+      MIN_VALUE: 0,
+      MAX_VALUE: 100,
+      UNIT: '%'
+    },
+    phobos: {
+      CLASS: 'effects__preview--phobos',
+      PROPERTY: 'blur',
+      MIN_VALUE: 0,
+      MAX_VALUE: 3,
+      UNIT: 'px'
+    },
+    heat: {
+      CLASS: 'effects__preview--heat',
+      PROPERTY: 'brightness',
+      MIN_VALUE: 1,
+      MAX_VALUE: 3,
+      UNIT: ''
+    }
+  };
+
+  var effectValue = {
+    MAX: 100,
+    DEFAULT: 100,
+  };
+
+  var pinValue = {
     MIN: 0,
     MAX: 100
   };
+
+  var getCurrentEffect = function () {
+    currentEffect = effectsListElement.querySelector('.effects__radio:checked');
+    currentEffectName = currentEffect.value;
+
+    return currentEffectName;
+  };
+
+  window.setDefaultEffect = function () {
+    var defaultEffectInput = effectsListElement.querySelector('#effect-none');
+
+    currentEffect.removeAttribute('checked');
+    defaultEffectInput.setAttribute('checked', '');
+
+    rangeFilter.classList.add('hidden');
+
+    prewiewImg.removeAttribute('class');
+    prewiewImg.classList.add('effects__preview--' + getCurrentEffect());
+
+    // выставляем ползунок на 100% по умолчанию
+    getPinPosition(100);
+    applyEffect(effectValue.DEFAULT);
+  };
+
+  var changeEffect = function (evt) {
+    var target = evt.target;
+
+    if (target.name === 'effect') {
+      currentEffect.removeAttribute('checked');
+      target.setAttribute('checked', '');
+      rangeFilter.classList.remove('hidden');
+      getPinPosition(100);
+
+      if (target.value === DEFAULT_FILTER_NAME) {
+        window.setDefaultEffect();
+
+        return;
+      }
+
+      currentEffectName = getCurrentEffect();
+      var currentEffectClassName = photoEffects[currentEffectName].CLASS;
+
+      prewiewImg.removeAttribute('class');
+      prewiewImg.classList.add(currentEffectClassName);
+
+      applyEffect(effectValue.DEFAULT);
+    }
+  };
+
+  var getFilterValue = function (effect, value) {
+    return value * (photoEffects[effect].MAX_VALUE - photoEffects[effect].MIN_VALUE) / effectValue.MAX + photoEffects[effect].MIN_VALUE + photoEffects[effect].UNIT;
+  };
+
+  var applyEffect = function (value) {
+    prewiewImg.style.filter = currentEffectName !== DEFAULT_FILTER_NAME ? photoEffects[currentEffectName].PROPERTY + '(' + getFilterValue(currentEffectName, value) + ')' : DEFAULT_FILTER_NAME;
+  };
+
+  effectsListElement.addEventListener('change', changeEffect);
+
+  // слайдер
 
   var sliderHandler = function (downEvt) {
     var startPinPosition = downEvt.clientX;
@@ -18,6 +128,7 @@
     var currentPinPosition = (startPinPosition - sliderLineRect.left) / sliderLineRect.width * 100;
 
     getPinPosition(currentPinPosition);
+    applyEffect(currentPinPosition);
 
     var movePinHandler = function (moveEvt) {
       var shift = startPinPosition - moveEvt.clientX;
@@ -25,24 +136,25 @@
 
       var movePosition = (sliderPin.offsetLeft - shift) / sliderLineRect.width * 100;
 
-      if (movePosition <= PinValue.MIN) {
-        movePosition = PinValue.MIN;
-        sliderValue.value = PinValue.MIN;
-      } else if (movePosition >= PinValue.MAX) {
-        movePosition = PinValue.MAX;
-        sliderValue.value = PinValue.MAX;
+      if (movePosition <= pinValue.MIN) {
+        movePosition = pinValue.MIN;
+        sliderValue.value = pinValue.MIN;
+      } else if (movePosition >= pinValue.MAX) {
+        movePosition = pinValue.MAX;
+        sliderValue.value = pinValue.MAX;
       }
 
       getPinPosition(movePosition);
+      applyEffect(movePosition);
     };
 
     var upPinHandler = function () {
-      rangeFilter.removeEventListener('mousemove', movePinHandler);
-      rangeFilter.removeEventListener('mouseup', upPinHandler);
+      document.removeEventListener('mousemove', movePinHandler);
+      document.removeEventListener('mouseup', upPinHandler);
     };
 
-    rangeFilter.addEventListener('mousemove', movePinHandler);
-    rangeFilter.addEventListener('mouseup', upPinHandler);
+    document.addEventListener('mousemove', movePinHandler);
+    document.addEventListener('mouseup', upPinHandler);
   };
 
   var getPinPosition = function (value) {

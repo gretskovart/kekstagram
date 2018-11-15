@@ -29,6 +29,7 @@
 
   window.uploadButton.addEventListener('change', function () {
     window.upload();
+    window.setDefaultEffect();
     showImgUploadPrewiew();
   });
 
