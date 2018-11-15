@@ -36,8 +36,21 @@
 
   // открыть изображения из галлерии в полный экран
 
+  var findImgObjInArray = function (target) {
+    var currentImgSrc = target.getAttribute('src');
+    var index;
+
+    window.data.imgArray.some(function (item, i) {
+      index = i;
+      return item.url === currentImgSrc;
+    });
+
+    return window.data.imgArray[index];
+  };
+
   var clickGalleryImgHandlers = function (evt) {
     var target = evt.target;
+    var currentObj = findImgObjInArray(target);
 
     if (!target.parentNode.classList.contains('picture') || target.tagName !== 'IMG') {
       return;
@@ -45,8 +58,7 @@
 
     evt.preventDefault();
 
-    window.pictures.showFullsizeImg(window.data.imgArray[0]);
-
+    window.pictures.showFullsizeImg(currentObj);
     window.addEventListener('keyup', keyupEscPopupFullsizeHandlers);
   };
 
