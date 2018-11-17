@@ -5,10 +5,10 @@
   var URL_SEND = 'https://js.dump.academy/kekstagram';
   var SERVER_RESPONSE = 10000;
 
-  var xhr = new XMLHttpRequest();
-  xhr.responseType = 'json';
-
   var responseChecker = function (onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
     var error;
 
     xhr.addEventListener('timeout', function () {
@@ -40,18 +40,24 @@
         onError(error);
       }
     });
+
+    return xhr;
+  };
+
+  var loadData = function (onLoad, onError) {
+    var xhr = responseChecker(onLoad, onError);
+    xhr.open('GET', URL_DATA);
+    xhr.send();
+  };
+
+  var sendData = function (data, onLoad, onError) {
+    var xhr = responseChecker(onLoad, onError);
+    xhr.open('POST', URL_SEND);
+    xhr.send(data);
   };
 
   window.serverData = {
-    loadData: function (onLoad, onError) {
-      responseChecker(onLoad, onError);
-      xhr.open('GET', URL_DATA);
-      xhr.send();
-    },
-    sendData: function (data, onLoad, onError) {
-      responseChecker(onLoad, onError);
-      xhr.open('POST', URL_SEND);
-      xhr.send(data);
-    }
+    loadData: loadData,
+    sendData: sendData
   };
 })();

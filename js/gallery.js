@@ -6,16 +6,16 @@
   var closeUploadPopupButton = imgUploadSection.querySelector('#upload-cancel');
   var uploadPopup = imgUploadSection.querySelector('.img-upload__overlay');
 
-  var ESK_KEY_CODE = 27;
+  window.ESK_KEY_CODE = 27;
 
   // загрузка изображений
   var keyupEscPopupUploadHandlers = function (evt) {
-    if (evt.keyCode === ESK_KEY_CODE) {
-      closeImgPopupUpload();
+    if (evt.keyCode === window.ESK_KEY_CODE && document.activeElement.parentNode !== window.formTextInputs) {
+      window.closeImgPopupUpload();
     }
   };
 
-  var closeImgPopupUpload = function () {
+  window.closeImgPopupUpload = function () {
     uploadPopup.classList.add('hidden');
     window.removeEventListener('keyup', keyupEscPopupUploadHandlers);
   };
@@ -33,7 +33,7 @@
     showImgUploadPrewiew();
   });
 
-  closeUploadPopupButton.addEventListener('click', closeImgPopupUpload);
+  closeUploadPopupButton.addEventListener('click', window.closeImgPopupUpload);
 
   // открыть изображения из галлерии в полный экран
 
@@ -69,7 +69,7 @@
   };
 
   var keyupEscPopupFullsizeHandlers = function (evt) {
-    if (evt.keyCode === ESK_KEY_CODE) {
+    if (evt.keyCode === window.ESK_KEY_CODE) {
       closeImgPopupFullsize();
     }
   };

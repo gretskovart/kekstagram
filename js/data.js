@@ -3,12 +3,11 @@
 (function () {
   window.data = {
     onError: function (error) {
-      var main = document.querySelector('main');
       var fragment = document.createDocumentFragment();
-      var sectionError = window.data.copyTemplates('#error', '.error', main);
+      var sectionError = window.data.copyTemplates('#error', '.error', window.main);
 
       fragment.appendChild(sectionError);
-      main.appendChild(fragment);
+      window.main.appendChild(fragment);
 
       var modalErrorText = document.querySelector('.error__title');
 
