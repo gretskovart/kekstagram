@@ -3,8 +3,8 @@
 (function () {
   var form = window.pictures.picturesContent.querySelector('.img-upload__form');
 
-  window.formTextInputs = form.querySelector('.img-upload__text');
-  window.main = document.querySelector('main');
+  var formTextInputs = form.querySelector('.img-upload__text');
+  var main = document.querySelector('main');
 
   var chechHashtagsInput = function (value) {
     var arrayOfHashtags = value.split(' ');
@@ -73,8 +73,6 @@
     } else if (checkCountOfHashtags(arrayOfHashtags)) {
       errorValidity = 'Хеш-теги не должны повторяться';
 
-    } else {
-      return false;
     }
 
     return errorValidity;
@@ -82,13 +80,13 @@
 
   // если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
 
-
   var formInputsChecker = function (evt) {
     var hashTagsInput = form.querySelector('.text__hashtags');
     var hashTagsInputValue = hashTagsInput.value;
 
     evt.preventDefault();
     hashTagsInput.removeAttribute('style');
+    hashTagsInput.setCustomValidity('');
 
     if (hashTagsInputValue.length) {
       var hashTagsResult = chechHashtagsInput(hashTagsInputValue);
@@ -96,7 +94,6 @@
       if (hashTagsResult) {
         hashTagsInput.setCustomValidity(hashTagsResult);
         hashTagsInput.style.border = '2px solid red';
-        form.setCustomValidity(hashTagsResult);
       }
     }
   };
@@ -105,11 +102,11 @@
     window.closeImgPopupUpload();
 
     var fragment = document.createDocumentFragment();
-    var sectionSuccess = window.data.copyTemplates('#success', '.success', window.main);
+    var sectionSuccess = window.data.copyTemplates('#success', '.success', window.formModule.main);
 
     fragment.appendChild(sectionSuccess);
 
-    window.main.appendChild(fragment);
+    window.formModule.main.appendChild(fragment);
 
     form.reset();
   };
@@ -125,7 +122,9 @@
   var hidePopupSuccess = function () {
     var successPopup = document.querySelector('.success');
 
-    successPopup.remove();
+    if (successPopup) {
+      successPopup.remove();
+    }
   };
 
   var keyupEscPopupUpSuccessHandlers = function (evt) {
@@ -146,11 +145,16 @@
   document.addEventListener('click', clickSuccessBtnHadlers);
   document.addEventListener('click', clickOverlayHandlers);
 
-  window.formTextInputs.addEventListener('focusout', formInputsChecker);
-
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-debugger;
+
     window.serverData.sendData(new FormData(form), loadSuccess, window.data.onError);
   });
+
+  window.formModule = {
+    formTextInputs: formTextInputs,
+    main: main
+  };
+
+  window.formModule.formTextInputs.addEventListener('focusout', formInputsChecker);
 })();
