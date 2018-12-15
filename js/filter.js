@@ -61,14 +61,13 @@
   };
 
   var excludeDebounce = function (callback) {
-    var DEBOUNCE_INTERVAL = 500;
     var lastTimeout;
 
     if (lastTimeout) {
       clearTimeout(lastTimeout);
     }
 
-    lastTimeout = setTimeout(callback, DEBOUNCE_INTERVAL);
+    lastTimeout = setTimeout(callback, window.constants.DEBOUNCE_INTERVAL);
   };
 
   var clickFiltersHandlers = function (evt) {
@@ -86,7 +85,7 @@
   filtersBlock.addEventListener('click', clickFiltersHandlers);
 
   filtersBlock.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.ENTER_KEY_CODE) {
+    if (evt.keyCode === window.constants.KEY_CODE.ESC) {
       clickFiltersHandlers();
     }
   });

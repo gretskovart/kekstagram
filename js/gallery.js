@@ -1,9 +1,6 @@
 'use strict';
 
 (function () {
-  window.ESK_KEY_CODE = 27;
-  window.ENTER_KEY_CODE = 13;
-
   var closeFullsizeButton = window.pictures.fullSizeWrapper.querySelector('.big-picture__cancel');
   var imgUploadSection = window.pictures.picturesContent.querySelector('.img-upload');
   var closeUploadPopupButton = imgUploadSection.querySelector('#upload-cancel');
@@ -12,7 +9,7 @@
 
   // загрузка изображений
   var keyupEscPopupUploadHandlers = function (evt) {
-    if (evt.keyCode === window.ESK_KEY_CODE && document.activeElement.parentNode !== window.formModule.formTextInputs) {
+    if (evt.keyCode === window.constants.KEY_CODE.ESC && document.activeElement.parentNode !== window.formModule.formTextInputs) {
       window.closeImgPopupUpload();
     }
   };
@@ -78,7 +75,7 @@
   };
 
   var keyupEscPopupFullsizeHandlers = function (evt) {
-    if (evt.keyCode === window.ESK_KEY_CODE) {
+    if (evt.keyCode === window.constants.KEY_CODE.ESC) {
       closeImgPopupFullsize();
     }
   };
@@ -86,7 +83,7 @@
   window.pictures.picturesContent.addEventListener('click', clickGalleryImgHandlers);
 
   window.pictures.picturesContent.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.ENTER_KEY_CODE) {
+    if (evt.keyCode === window.constants.KEY_CODE.ENTER) {
       clickGalleryImgHandlers(evt);
     }
   });
