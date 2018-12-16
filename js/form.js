@@ -7,7 +7,7 @@
   var main = document.querySelector('main');
 
   var chechHashtagsInput = function (value) {
-    var arrayOfHashtags = value.replace(/\s+/g, ' ').trim().split(' ');
+    var arrayOfHashtags = value.replace(/\s+/g, ' ').trim().toLowerCase().split(' ');
     var result;
     var errorValidity;
 
@@ -73,8 +73,7 @@
   };
 
   // если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
-
-  var formInputsChecker = function (evt) {
+  var formInputHandler = function (evt) {
     var hashTagsInput = form.querySelector('.text__hashtags');
     var hashTagsInputValue = hashTagsInput.value;
 
@@ -93,7 +92,7 @@
   };
 
   var loadSuccess = function () {
-    window.closeImgPopupUpload();
+    window.closeImgPopupUploadHandler();
 
     var fragment = document.createDocumentFragment();
     var sectionSuccess = window.data.copyTemplates('#success', '.success', window.formModule.main);
@@ -105,7 +104,7 @@
     form.reset();
   };
 
-  var clickSuccessBtnHadlers = function (evt) {
+  var clickSuccessBtnHandler = function (evt) {
     var target = evt.target;
 
     if (target.classList.contains('success__button')) {
@@ -121,13 +120,13 @@
     }
   };
 
-  var keyupEscPopupUpSuccessHandlers = function (evt) {
+  var keyupEscPopupUpSuccessHandler = function (evt) {
     if (evt.keyCode === window.constants.KEY_CODE.ESC) {
       hidePopupSuccess();
     }
   };
 
-  var clickOverlayHandlers = function (evt) {
+  var clickOverlayHandler = function (evt) {
     var target = evt.target;
 
     if (target.classList.contains('success')) {
@@ -135,9 +134,9 @@
     }
   };
 
-  document.addEventListener('keyup', keyupEscPopupUpSuccessHandlers);
-  document.addEventListener('click', clickSuccessBtnHadlers);
-  document.addEventListener('click', clickOverlayHandlers);
+  document.addEventListener('keyup', keyupEscPopupUpSuccessHandler);
+  document.addEventListener('click', clickSuccessBtnHandler);
+  document.addEventListener('click', clickOverlayHandler);
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
@@ -150,5 +149,5 @@
     main: main
   };
 
-  window.formModule.formTextInputs.addEventListener('focusout', formInputsChecker);
+  window.formModule.formTextInputs.addEventListener('focusout', formInputHandler);
 })();

@@ -82,7 +82,7 @@
     applyEffect(effectValue.DEFAULT);
   };
 
-  var changeEffect = function (evt) {
+  var changeEffectHandler = function (evt) {
     var target = evt.target;
 
     if (target.name === 'effect') {
@@ -115,10 +115,9 @@
     prewiewImg.style.filter = currentEffectName !== window.constants.DEFAULT_FILTER_NAME ? photoEffects[currentEffectName].PROPERTY + '(' + getFilterValue(currentEffectName, value) + ')' : window.constants.DEFAULT_FILTER_NAME;
   };
 
-  effectsList.addEventListener('change', changeEffect);
+  effectsList.addEventListener('change', changeEffectHandler);
 
   // слайдер
-
   var sliderHandler = function (downEvt) {
     var startPinPosition = downEvt.clientX;
     var sliderLineRect = line.getBoundingClientRect();
