@@ -1,16 +1,15 @@
 'use strict';
 
 (function () {
-  var DEFAULT_FILTER_NAME = 'none';
-
   var rangeFilter = document.querySelector('.img-upload__effect-level');
   var line = rangeFilter.querySelector('.effect-level__line');
   var sliderPin = line.querySelector('.effect-level__pin');
   var sliderValue = rangeFilter.querySelector('.effect-level__value');
   var sliderFill = rangeFilter.querySelector('.effect-level__depth');
 
-  var effectsListElement = window.pictures.picturesContent.querySelector('.effects__list');
-  var currentEffect = effectsListElement.querySelector('.effects__radio:checked');
+  var effectsList = window.pictures.picturesContent.querySelector('.effects__list');
+  var defaultEffectInput = effectsList.querySelector('#effect-none');
+  var currentEffect = effectsList.querySelector('.effects__radio:checked');
   var currentEffectName = currentEffect.value;
   var prewiewImg = window.pictures.picturesContent.querySelector('.img-upload__preview img');
 
@@ -63,15 +62,13 @@
   };
 
   var getCurrentEffect = function () {
-    currentEffect = effectsListElement.querySelector('.effects__radio:checked');
+    currentEffect = effectsList.querySelector('.effects__radio:checked');
     currentEffectName = currentEffect.value;
 
     return currentEffectName;
   };
 
   window.setDefaultEffect = function () {
-    var defaultEffectInput = effectsListElement.querySelector('#effect-none');
-
     currentEffect.removeAttribute('checked');
     defaultEffectInput.setAttribute('checked', '');
 
@@ -81,20 +78,20 @@
     prewiewImg.classList.add('effects__preview--' + getCurrentEffect());
 
     // выставляем ползунок на 100% по умолчанию
-    getPinPosition(100);
+    getPinPosition(window.constants.MAX_PIN_PERCENT);
     applyEffect(effectValue.DEFAULT);
   };
 
-  var changeEffect = function (evt) {
+  var changeEffectHandler = function (evt) {
     var target = evt.target;
 
     if (target.name === 'effect') {
       currentEffect.removeAttribute('checked');
       target.setAttribute('checked', '');
       rangeFilter.classList.remove('hidden');
-      getPinPosition(100);
+      getPinPosition(window.constants.MAX_PIN_PERCENT);
 
-      if (target.value === DEFAULT_FILTER_NAME) {
+      if (target.value === window.constants.DEFAULT_FILTER_NAME) {
         window.setDefaultEffect();
 
         return;
@@ -115,13 +112,12 @@
   };
 
   var applyEffect = function (value) {
-    prewiewImg.style.filter = currentEffectName !== DEFAULT_FILTER_NAME ? photoEffects[currentEffectName].PROPERTY + '(' + getFilterValue(currentEffectName, value) + ')' : DEFAULT_FILTER_NAME;
+    prewiewImg.style.filter = currentEffectName !== window.constants.DEFAULT_FILTER_NAME ? photoEffects[currentEffectName].PROPERTY + '(' + getFilterValue(currentEffectName, value) + ')' : window.constants.DEFAULT_FILTER_NAME;
   };
 
-  effectsListElement.addEventListener('change', changeEffect);
+  effectsList.addEventListener('change', changeEffectHandler);
 
   // слайдер
-
   var sliderHandler = function (downEvt) {
     var startPinPosition = downEvt.clientX;
     var sliderLineRect = line.getBoundingClientRect();

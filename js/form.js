@@ -7,10 +7,9 @@
   var main = document.querySelector('main');
 
   var chechHashtagsInput = function (value) {
-    var arrayOfHashtags = value.split(' ');
+    var arrayOfHashtags = value.replace(/\s+/g, ' ').trim().toLowerCase().split(' ');
     var result;
     var errorValidity;
-
 
     // хэш-тег начинается с символа # (решётка);
     var checkFirstSymbol = function (arr) {
@@ -29,7 +28,7 @@
     // максимальная длина одного хэш-тега 20 символов, включая решётку;
     var checkLength = function (arr) {
       result = arr.some(function (item) {
-        return item.length < 2 || item.length > 20;
+        return item.length < window.constants.HASHTAG_LENGTH_MIN || item.length > window.constants.HASHTAG_LENGTH_MAX;
       });
 
       return !!result;
@@ -38,27 +37,22 @@
     // один и тот же хэш-тег не может быть использован дважды;
     // теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом.
     var checkDublicates = function (arr) {
-      result = 0;
+      result = false;
 
-      for (var j = 0; j < arr.length; j++) {
-        for (var k = j + 1; k < arr.length; k++) {
-          var a = arr[k].toLowerCase();
-          var b = arr[j].toLowerCase();
-
-          if (a === b) {
-            result++;
-
-            break;
+      arr.some(function (elem, elemIndex) {
+        for (var index = 0; index < arr.length; index++) {
+          if (elemIndex !== index && arr[index] === elem) {
+            result = true;
           }
         }
-      }
+      });
 
-      return !!result;
+      return result;
     };
 
     // нельзя указать больше пяти хэш-тегов;
     var checkCountOfHashtags = function (arr) {
-      return arr.length > 5;
+      return arr.length > window.constants.HASHTAGS_LIMIT;
     };
 
     if (!checkFirstSymbol(arrayOfHashtags)) {
@@ -71,7 +65,7 @@
       errorValidity = 'Хеш-теги не должны повторяться';
 
     } else if (checkCountOfHashtags(arrayOfHashtags)) {
-      errorValidity = 'Хеш-теги не должны повторяться';
+      errorValidity = 'Нельзя указать больше пяти хэш-тегов';
 
     }
 
@@ -79,8 +73,7 @@
   };
 
   // если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
-
-  var formInputsChecker = function (evt) {
+  var formInputHandler = function (evt) {
     var hashTagsInput = form.querySelector('.text__hashtags');
     var hashTagsInputValue = hashTagsInput.value;
 
@@ -99,7 +92,7 @@
   };
 
   var loadSuccess = function () {
-    window.closeImgPopupUpload();
+    window.closeImgPopupUploadHandler();
 
     var fragment = document.createDocumentFragment();
     var sectionSuccess = window.data.copyTemplates('#success', '.success', window.formModule.main);
@@ -111,7 +104,7 @@
     form.reset();
   };
 
-  var clickSuccessBtnHadlers = function (evt) {
+  var clickSuccessBtnHandler = function (evt) {
     var target = evt.target;
 
     if (target.classList.contains('success__button')) {
@@ -127,13 +120,13 @@
     }
   };
 
-  var keyupEscPopupUpSuccessHandlers = function (evt) {
-    if (evt.keyCode === window.ESK_KEY_CODE) {
+  var keyupEscPopupUpSuccessHandler = function (evt) {
+    if (evt.keyCode === window.constants.KEY_CODE.ESC) {
       hidePopupSuccess();
     }
   };
 
-  var clickOverlayHandlers = function (evt) {
+  var clickOverlayHandler = function (evt) {
     var target = evt.target;
 
     if (target.classList.contains('success')) {
@@ -141,9 +134,9 @@
     }
   };
 
-  document.addEventListener('keyup', keyupEscPopupUpSuccessHandlers);
-  document.addEventListener('click', clickSuccessBtnHadlers);
-  document.addEventListener('click', clickOverlayHandlers);
+  document.addEventListener('keyup', keyupEscPopupUpSuccessHandler);
+  document.addEventListener('click', clickSuccessBtnHandler);
+  document.addEventListener('click', clickOverlayHandler);
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
@@ -156,5 +149,5 @@
     main: main
   };
 
-  window.formModule.formTextInputs.addEventListener('focusout', formInputsChecker);
+  window.formModule.formTextInputs.addEventListener('focusout', formInputHandler);
 })();

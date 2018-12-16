@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var previewImg = document.querySelector('.img-upload__preview img');
   var uploadButton = document.querySelector('#upload-file');
 
@@ -9,7 +8,7 @@
     var file = uploadButton.files[0];
     var fileName = file.name.toLowerCase();
 
-    var matches = FILE_TYPES.some(function (it) {
+    var matches = window.constants.FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
 

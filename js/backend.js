@@ -1,10 +1,6 @@
 'use strict';
 
 (function () {
-  var URL_DATA = 'https://js.dump.academy/kekstagram/data';
-  var URL_SEND = 'https://js.dump.academy/kekstagram';
-  var SERVER_RESPONSE = 10000;
-
   var responseChecker = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -15,7 +11,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = SERVER_RESPONSE;
+    xhr.timeout = window.constants.SERVER_RESPONSE;
 
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
@@ -46,13 +42,13 @@
 
   var loadData = function (onLoad, onError) {
     var xhr = responseChecker(onLoad, onError);
-    xhr.open('GET', URL_DATA);
+    xhr.open('GET', window.constants.URL_DATA);
     xhr.send();
   };
 
   var sendData = function (data, onLoad, onError) {
     var xhr = responseChecker(onLoad, onError);
-    xhr.open('POST', URL_SEND);
+    xhr.open('POST', window.constants.URL_SEND);
     xhr.send(data);
   };
 

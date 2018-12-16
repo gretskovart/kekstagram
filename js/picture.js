@@ -66,8 +66,7 @@
       };
 
       var renderComments = function () {
-        var COMMENTS_LIMIT = 5;
-        var len = item.comments.length < COMMENTS_LIMIT ? item.comments.length : COMMENTS_LIMIT;
+        var len = item.comments.length < window.constants.COMMENTS_LIMIT ? item.comments.length : window.constants.COMMENTS_LIMIT;
 
         for (var i = 0; i < len; i++) {
           var listItem = document.createElement('li');

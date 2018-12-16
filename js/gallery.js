@@ -1,9 +1,6 @@
 'use strict';
 
 (function () {
-  window.ESK_KEY_CODE = 27;
-  window.ENTER_KEY_CODE = 13;
-
   var closeFullsizeButton = window.pictures.fullSizeWrapper.querySelector('.big-picture__cancel');
   var imgUploadSection = window.pictures.picturesContent.querySelector('.img-upload');
   var closeUploadPopupButton = imgUploadSection.querySelector('#upload-cancel');
@@ -11,20 +8,20 @@
   var uploadButton = imgUploadSection.querySelector('#upload-file');
 
   // загрузка изображений
-  var keyupEscPopupUploadHandlers = function (evt) {
-    if (evt.keyCode === window.ESK_KEY_CODE && document.activeElement.parentNode !== window.formModule.formTextInputs) {
-      window.closeImgPopupUpload();
+  var keyupEscPopupUploadHandler = function (evt) {
+    if (evt.keyCode === window.constants.KEY_CODE.ESC && document.activeElement.parentNode !== window.formModule.formTextInputs) {
+      window.closeImgPopupUploadHandler();
     }
   };
 
-  window.closeImgPopupUpload = function () {
+  window.closeImgPopupUploadHandler = function () {
     uploadPopup.classList.add('hidden');
-    window.removeEventListener('keyup', keyupEscPopupUploadHandlers);
+    window.removeEventListener('keyup', keyupEscPopupUploadHandler);
   };
 
   var showImgUploadPrewiew = function () {
     uploadPopup.classList.remove('hidden');
-    window.addEventListener('keyup', keyupEscPopupUploadHandlers);
+    window.addEventListener('keyup', keyupEscPopupUploadHandler);
   };
 
   uploadButton.addEventListener('change', function () {
@@ -34,10 +31,9 @@
     showImgUploadPrewiew();
   });
 
-  closeUploadPopupButton.addEventListener('click', window.closeImgPopupUpload);
+  closeUploadPopupButton.addEventListener('click', window.closeImgPopupUploadHandler);
 
   // открыть изображения из галлерии в полный экран
-
   var findImgObjInArray = function (target) {
     var currentImgSrc;
     var index;
@@ -56,7 +52,7 @@
     return window.data.imgArray[index];
   };
 
-  var clickGalleryImgHandlers = function (evt) {
+  var clickGalleryImgHandler = function (evt) {
     var target = evt.target;
     var currentObj = findImgObjInArray(target);
 
@@ -68,28 +64,28 @@
 
     window.pictures.showFullsizeImg(currentObj);
     document.body.classList.add('modal-open');
-    window.addEventListener('keyup', keyupEscPopupFullsizeHandlers);
+    window.addEventListener('keyup', keyupEscPopupFullsizeHandler);
   };
 
-  var closeImgPopupFullsize = function () {
+  var closeImgPopupFullsizeHandler = function () {
     window.pictures.fullSizeWrapper.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    window.removeEventListener('keyup', keyupEscPopupFullsizeHandlers);
+    window.removeEventListener('keyup', keyupEscPopupFullsizeHandler);
   };
 
-  var keyupEscPopupFullsizeHandlers = function (evt) {
-    if (evt.keyCode === window.ESK_KEY_CODE) {
-      closeImgPopupFullsize();
+  var keyupEscPopupFullsizeHandler = function (evt) {
+    if (evt.keyCode === window.constants.KEY_CODE.ESC) {
+      closeImgPopupFullsizeHandler();
     }
   };
 
-  window.pictures.picturesContent.addEventListener('click', clickGalleryImgHandlers);
+  window.pictures.picturesContent.addEventListener('click', clickGalleryImgHandler);
 
   window.pictures.picturesContent.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.ENTER_KEY_CODE) {
-      clickGalleryImgHandlers(evt);
+    if (evt.keyCode === window.constants.KEY_CODE.ENTER) {
+      clickGalleryImgHandler(evt);
     }
   });
 
-  closeFullsizeButton.addEventListener('click', closeImgPopupFullsize);
+  closeFullsizeButton.addEventListener('click', closeImgPopupFullsizeHandler);
 })();

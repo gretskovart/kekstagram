@@ -61,17 +61,16 @@
   };
 
   var excludeDebounce = function (callback) {
-    var DEBOUNCE_INTERVAL = 500;
     var lastTimeout;
 
     if (lastTimeout) {
       clearTimeout(lastTimeout);
     }
 
-    lastTimeout = setTimeout(callback, DEBOUNCE_INTERVAL);
+    lastTimeout = setTimeout(callback, window.constants.DEBOUNCE_INTERVAL);
   };
 
-  var clickFiltersHandlers = function (evt) {
+  var clickFiltersHandler = function (evt) {
     var target = evt.target;
 
     if (target.tagName === 'BUTTON') {
@@ -83,11 +82,11 @@
     }
   };
 
-  filtersBlock.addEventListener('click', clickFiltersHandlers);
+  filtersBlock.addEventListener('click', clickFiltersHandler);
 
   filtersBlock.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.ENTER_KEY_CODE) {
-      clickFiltersHandlers();
+    if (evt.keyCode === window.constants.KEY_CODE.ESC) {
+      clickFiltersHandler();
     }
   });
 
