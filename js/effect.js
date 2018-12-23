@@ -82,7 +82,7 @@
     applyEffect(effectValue.DEFAULT);
   };
 
-  var changeEffectHandler = function (evt) {
+  var effectBtnClickHandler = function (evt) {
     var target = evt.target;
 
     if (target.name === 'effect') {
@@ -115,10 +115,10 @@
     prewiewImg.style.filter = currentEffectName !== window.constants.DEFAULT_FILTER_NAME ? photoEffects[currentEffectName].PROPERTY + '(' + getFilterValue(currentEffectName, value) + ')' : window.constants.DEFAULT_FILTER_NAME;
   };
 
-  effectsList.addEventListener('change', changeEffectHandler);
+  effectsList.addEventListener('change', effectBtnClickHandler);
 
   // слайдер
-  var sliderHandler = function (downEvt) {
+  var sliderPinMouseDownHandler = function (downEvt) {
     var startPinPosition = downEvt.clientX;
     var sliderLineRect = line.getBoundingClientRect();
     var currentPinPosition = (startPinPosition - sliderLineRect.left) / sliderLineRect.width * 100;
@@ -126,7 +126,7 @@
     getPinPosition(currentPinPosition);
     applyEffect(currentPinPosition);
 
-    var movePinHandler = function (moveEvt) {
+    var sliderPinMoveHandler = function (moveEvt) {
       var shift = startPinPosition - moveEvt.clientX;
       startPinPosition = moveEvt.clientX;
 
@@ -135,6 +135,7 @@
       if (movePosition <= pinValue.MIN) {
         movePosition = pinValue.MIN;
         sliderValue.value = pinValue.MIN;
+
       } else if (movePosition >= pinValue.MAX) {
         movePosition = pinValue.MAX;
         sliderValue.value = pinValue.MAX;
@@ -144,13 +145,13 @@
       applyEffect(movePosition);
     };
 
-    var upPinHandler = function () {
-      document.removeEventListener('mousemove', movePinHandler);
-      document.removeEventListener('mouseup', upPinHandler);
+    var sliderPinMouseUpHandler = function () {
+      document.removeEventListener('mousemove', sliderPinMoveHandler);
+      document.removeEventListener('mouseup', sliderPinMouseUpHandler);
     };
 
-    document.addEventListener('mousemove', movePinHandler);
-    document.addEventListener('mouseup', upPinHandler);
+    document.addEventListener('mousemove', sliderPinMoveHandler);
+    document.addEventListener('mouseup', sliderPinMouseUpHandler);
   };
 
   var getPinPosition = function (value) {
@@ -159,5 +160,5 @@
     sliderFill.style.width = sliderPin.style.left;
   };
 
-  line.addEventListener('mousedown', sliderHandler);
+  line.addEventListener('mousedown', sliderPinMouseDownHandler);
 })();

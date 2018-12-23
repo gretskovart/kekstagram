@@ -8,20 +8,20 @@
   var uploadButton = imgUploadSection.querySelector('#upload-file');
 
   // загрузка изображений
-  var keyupEscPopupUploadHandler = function (evt) {
+  var popupUploadEscKeyupHandler = function (evt) {
     if (evt.keyCode === window.constants.KEY_CODE.ESC && document.activeElement.parentNode !== window.formModule.formTextInputs) {
-      window.closeImgPopupUploadHandler();
+      window.imgPopupUploadCloseHandler();
     }
   };
 
-  window.closeImgPopupUploadHandler = function () {
+  window.imgPopupUploadCloseHandler = function () {
     uploadPopup.classList.add('hidden');
-    window.removeEventListener('keyup', keyupEscPopupUploadHandler);
+    window.removeEventListener('keyup', popupUploadEscKeyupHandler);
   };
 
   var showImgUploadPrewiew = function () {
     uploadPopup.classList.remove('hidden');
-    window.addEventListener('keyup', keyupEscPopupUploadHandler);
+    window.addEventListener('keyup', popupUploadEscKeyupHandler);
   };
 
   uploadButton.addEventListener('change', function () {
@@ -31,7 +31,7 @@
     showImgUploadPrewiew();
   });
 
-  closeUploadPopupButton.addEventListener('click', window.closeImgPopupUploadHandler);
+  closeUploadPopupButton.addEventListener('click', window.imgPopupUploadCloseHandler);
 
   // открыть изображения из галлерии в полный экран
   var findImgObjInArray = function (target) {
@@ -52,7 +52,7 @@
     return window.data.imgArray[index];
   };
 
-  var clickGalleryImgHandler = function (evt) {
+  var galleryImgCLickHandler = function (evt) {
     var target = evt.target;
     var currentObj = findImgObjInArray(target);
 
@@ -64,28 +64,28 @@
 
     window.pictures.showFullsizeImg(currentObj);
     document.body.classList.add('modal-open');
-    window.addEventListener('keyup', keyupEscPopupFullsizeHandler);
+    window.addEventListener('keyup', popupFullsizeEscKeyupHandler);
   };
 
-  var closeImgPopupFullsizeHandler = function () {
+  var imgPopupFullsizeCloseHandler = function () {
     window.pictures.fullSizeWrapper.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    window.removeEventListener('keyup', keyupEscPopupFullsizeHandler);
+    window.removeEventListener('keyup', popupFullsizeEscKeyupHandler);
   };
 
-  var keyupEscPopupFullsizeHandler = function (evt) {
+  var popupFullsizeEscKeyupHandler = function (evt) {
     if (evt.keyCode === window.constants.KEY_CODE.ESC) {
-      closeImgPopupFullsizeHandler();
+      imgPopupFullsizeCloseHandler();
     }
   };
 
-  window.pictures.picturesContent.addEventListener('click', clickGalleryImgHandler);
+  window.pictures.picturesContent.addEventListener('click', galleryImgCLickHandler);
 
   window.pictures.picturesContent.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.constants.KEY_CODE.ENTER) {
-      clickGalleryImgHandler(evt);
+      galleryImgCLickHandler(evt);
     }
   });
 
-  closeFullsizeButton.addEventListener('click', closeImgPopupFullsizeHandler);
+  closeFullsizeButton.addEventListener('click', imgPopupFullsizeCloseHandler);
 })();

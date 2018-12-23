@@ -14,7 +14,7 @@
     DEFAULT: 100
   };
 
-  var clickScaleBtnHandler = function (point) {
+  var scaleBtnClickHandler = function (point) {
     var currentScale = parseInt(valueScale.value, 10);
 
     currentScale = currentScale + (scaleValues.STEP * point);
@@ -30,11 +30,11 @@
   };
 
   increaseScale.addEventListener('click', function () {
-    clickScaleBtnHandler(1);
+    scaleBtnClickHandler(1);
   });
 
   decreaseScale.addEventListener('click', function () {
-    clickScaleBtnHandler(-1);
+    scaleBtnClickHandler(-1);
   });
 
   window.setDefaultScale = function () {
