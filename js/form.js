@@ -73,7 +73,7 @@
   };
 
   // если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
-  var formInputHandler = function (evt) {
+  var formInputFocusoutHandler = function (evt) {
     var hashTagsInput = form.querySelector('.text__hashtags');
     var hashTagsInputValue = hashTagsInput.value;
 
@@ -92,7 +92,7 @@
   };
 
   var loadSuccess = function () {
-    window.closeImgPopupUploadHandler();
+    window.imgPopupUploadCloseHandler();
 
     var fragment = document.createDocumentFragment();
     var sectionSuccess = window.data.copyTemplates('#success', '.success', window.formModule.main);
@@ -104,7 +104,7 @@
     form.reset();
   };
 
-  var clickSuccessBtnHandler = function (evt) {
+  var successBtnClickHandler = function (evt) {
     var target = evt.target;
 
     if (target.classList.contains('success__button')) {
@@ -120,13 +120,13 @@
     }
   };
 
-  var keyupEscPopupUpSuccessHandler = function (evt) {
+  var popupUpSuccessEscKeyupHandler = function (evt) {
     if (evt.keyCode === window.constants.KEY_CODE.ESC) {
       hidePopupSuccess();
     }
   };
 
-  var clickOverlayHandler = function (evt) {
+  var overlayClickHandler = function (evt) {
     var target = evt.target;
 
     if (target.classList.contains('success')) {
@@ -134,9 +134,9 @@
     }
   };
 
-  document.addEventListener('keyup', keyupEscPopupUpSuccessHandler);
-  document.addEventListener('click', clickSuccessBtnHandler);
-  document.addEventListener('click', clickOverlayHandler);
+  document.addEventListener('keyup', popupUpSuccessEscKeyupHandler);
+  document.addEventListener('click', successBtnClickHandler);
+  document.addEventListener('click', overlayClickHandler);
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
@@ -149,5 +149,5 @@
     main: main
   };
 
-  window.formModule.formTextInputs.addEventListener('focusout', formInputHandler);
+  window.formModule.formTextInputs.addEventListener('focusout', formInputFocusoutHandler);
 })();

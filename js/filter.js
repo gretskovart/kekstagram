@@ -70,7 +70,7 @@
     lastTimeout = setTimeout(callback, window.constants.DEBOUNCE_INTERVAL);
   };
 
-  var clickFiltersHandler = function (evt) {
+  var filterBtnClickHandler = function (evt) {
     var target = evt.target;
 
     if (target.tagName === 'BUTTON') {
@@ -82,11 +82,11 @@
     }
   };
 
-  filtersBlock.addEventListener('click', clickFiltersHandler);
+  filtersBlock.addEventListener('click', filterBtnClickHandler);
 
   filtersBlock.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.constants.KEY_CODE.ESC) {
-      clickFiltersHandler();
+      filterBtnClickHandler();
     }
   });
 
